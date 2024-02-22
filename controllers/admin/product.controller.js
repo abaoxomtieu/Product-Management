@@ -27,16 +27,24 @@ module.exports.index = async (req, res) => {
     );
     filterStatus[index].class = "active";
   } else {
-    const index = filterStatus.findIndex(
-        (item) => item.status == ""
-      );
+    const index = filterStatus.findIndex((item) => item.status == "");
     filterStatus[index].class = "active";
   }
 
   let find = {
     deleted: false,
   };
-  if (req.query.status) find.status = req.query.status;
+
+  if (req.query.status) {
+    find.status = req.query.status;
+  }
+
+  let keyword = "";
+  if (req.query.keyword) {
+    keyword = req.query.keyword;
+    const regex = new RegExp(keyword, "i");
+    find.title = regex;
+  }
 
   const products = await Product.find(find);
 
@@ -44,5 +52,6 @@ module.exports.index = async (req, res) => {
     pageTitle: "danh sach san pham",
     products: products,
     filterStatus: filterStatus,
+    keyword: keyword,
   });
 };
