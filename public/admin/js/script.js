@@ -5,20 +5,16 @@ if (buttonStatus.length > 0) {
   buttonStatus.forEach((button) => {
     button.addEventListener("click", () => {
       const status = button.getAttribute("button-status");
-      console.log(status);
       if (status) {
         url.searchParams.set("status", status); //add param to url
       } else {
         url.searchParams.delete("status");
       }
-      console.log(url.href);
       window.location.href = url.href; //use function to redirect
     });
   });
 }
 // End button status
-
-// console.log(buttonStatus);
 
 //Form Seach
 const formSearch = document.querySelector("#form-search");
@@ -26,7 +22,6 @@ if (formSearch) {
   let url = new URL(window.location.href);
   formSearch.addEventListener("submit", (e) => {
     e.preventDefault();
-    console.log(e.target.elements.keyword.value);
     const keyword = e.target.elements.keyword.value;
     if (keyword) {
       url.searchParams.set("keyword", keyword); //add param to url
@@ -42,7 +37,6 @@ if (formSearch) {
 const buttonsPagination = document.querySelectorAll("[button-pagination");
 if (buttonsPagination) {
   let url = new URL(window.location.href);
-  console.log(buttonsPagination);
   buttonsPagination.forEach((button) => {
     button.addEventListener("click", () => {
       const page = button.getAttribute("button-pagination");
@@ -55,6 +49,64 @@ if (buttonsPagination) {
 }
 
 //+ Back page
-const buttonBack = document.querySelector("[button-back]");
 
 //Pagination End
+
+// Checkbox Multi
+const checkboxMulti = document.querySelector("[checkbox-multi");
+if (checkboxMulti) {
+  const inputCheckAll = checkboxMulti.querySelector("input[name='checkall']");
+  const inputsId = checkboxMulti.querySelectorAll("input[name='id']");
+
+  inputCheckAll.addEventListener("click", () => {
+    if (inputCheckAll.checked) {
+      inputsId.forEach((input) => {
+        input.checked = true;
+      });
+    } else {
+      inputsId.forEach((input) => {
+        input.checked = false;
+      });
+    }
+  });
+  inputsId.forEach((input) => {
+    input.addEventListener("click", () => {
+      const countChecked = document.querySelectorAll(
+        "input[name='id']:checked"
+      ).length;
+      if (countChecked == inputsId.length) {
+        inputCheckAll.checked = true;
+      } else {
+        inputCheckAll.checked = false;
+      }
+    });
+  });
+}
+// End Checkbox Multi
+
+// Form Change Multi
+const formChangeMulti = document.querySelector("[form-change-multi]");
+const inputIds = document.querySelector("input[name='ids']");
+if (formChangeMulti) {
+  formChangeMulti.addEventListener("submit", (e) => {
+    e.preventDefault();
+    console.log(e);
+    const checkboxMulti = document.querySelector("[checkbox-multi]");
+    const inputsChecked = checkboxMulti.querySelectorAll("input[name='id']:checked");
+    if (inputsChecked.length > 0) {
+      let ids = [];
+      inputsChecked.forEach((input) => {
+        const id = input.getAttribute("value"); // or input.value
+        ids.push(id);
+      });
+
+      inputIds.value = ids.join(", ");
+      formChangeMulti.submit();
+    } else {
+      alert("Please select at least one!");
+    }
+  });
+}
+// End Form Change Multi
+
+//

@@ -1,13 +1,17 @@
 extends ../../layouts/default.pug
 include ../../mixins/filter-status.pug
 include ../../mixins/search.pug
+include ../../mixins/pagination.pug
+include ../../mixins/form-change-multi.pug
+
+
 
 
 block main 
-    h1 trang ds san pham
+    h1 Product list
 
     .card.mb-3
-        .card-header Bộ lọc và Tìm kiếm
+        .card-header Filter and search
         .card-body
             .row
                 .col-6
@@ -19,18 +23,30 @@ block main
     .card.mb-3
         .card-header List products
         .card-body
-            table.table.table-hover.table-sm
+            +form-change-multi(`${prefixAdmin}/products/change-multi?_method=PATCH`)
+            table(
+                class="table table-hover table-sm"
+                checkbox-multi
+            )
                 thead 
-                    tr 
-                        th STT 
-                        th Hinh anh 
-                        th Tieu de 
-                        th Gia 
-                        th Trang thai 
-                        th Hanh dong 
+                    tr
+                        th
+                            input(type="checkbox" name="checkall")
+                        th ID
+                        th Image
+                        th Name 
+                        th Price 
+                        th Status 
+                        th Action 
                 tbody
                     each item, index in products 
                         tr 
+                            td 
+                                input(
+                                type="checkbox"
+                                name="id"
+                                value=item.id
+                                )
                             td #{index + 1}
                             td 
                                 img(src=item.thumbnail
@@ -41,27 +57,42 @@ block main
                             td #{item.price}$
                             td
                                 if(item.status == 'active')
-                                    a(href="#" class="badge badge-success") Active
+                                    a(href="javascript:;"
+                                    data-status = item.status
+                                    data-id = item.id  
+                                    button-change-status
+                                    class="badge badge-success"
+                                    ) Active
                                 else 
-                                    a(href="#" class="badge badge-danger") Inactive
+                                    a(href="#" 
+                                    data-status = item.status
+                                    data-id = item.id  
+                                    button-change-status
+                                    class="badge badge-danger") Inactive
                             td 
-                                button(class="btn btn-warning btn-sm" ) Modify
-                                button(class="btn btn-danger btn-sm ml-1" ) Delete
+                                button(
+                                    class="btn btn-warning btn-sm" 
+                                    ) Modify
+                                button(
+                                    class="btn btn-danger btn-sm ml-1" 
+                                    data-id=item.id
+                                    button-delete ) Delete
 
-    nav
-        ul(class="pagination")
-            if(pagination.currentPage > 1)
-                li(class="page-item")
-                    button(class="page-link" button-pagination= pagination.currentPage -1) Back page
+    +pagination(pagination)
 
-            - for(var i = 1; i <= pagination.totalPage; i++)
-                li(class=`page-item ${pagination.currentPage ==i ? "active" : ""}`)
-                    button(
-                        class="page-link"
-                        button-pagination=i) #{i}
-            if(pagination.currentPage < pagination.totalPage)
-                li(class="page-item")
-                    button(class="page-link" button-pagination= pagination.currentPage +1) Next page
-                            if(pagination.currentPage < pagination.totalPage)
-                li(class="page-item")
-                    button(class="page-link" button-pagination= pagination.totalPage) Last page
+    form(
+        action=""
+        method="POST"
+        id="form-change-status"
+        data-path = `${prefixAdmin}/products/change-status`
+    )
+    form(
+        action=""
+        method="POST"
+        id="form-delete-item"
+        data-path = `${prefixAdmin}/products/delete`
+    ) 
+
+
+
+    script(src="/admin/js/product.js") 
