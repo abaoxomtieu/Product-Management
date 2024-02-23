@@ -8,33 +8,53 @@ if (buttonStatus.length > 0) {
       console.log(status);
       if (status) {
         url.searchParams.set("status", status); //add param to url
-      }
-      else{
+      } else {
         url.searchParams.delete("status");
       }
       console.log(url.href);
-      window.location.href = url.href //use function to redirect
+      window.location.href = url.href; //use function to redirect
     });
   });
 }
 // End button status
 
-console.log(buttonStatus);
+// console.log(buttonStatus);
 
 //Form Seach
-const formSearch = document.querySelector("#form-search")
-if(formSearch){
+const formSearch = document.querySelector("#form-search");
+if (formSearch) {
   let url = new URL(window.location.href);
   formSearch.addEventListener("submit", (e) => {
     e.preventDefault();
-    console.log(e.target.elements.keyword.value)
-    const keyword = e.target.elements.keyword.value
+    console.log(e.target.elements.keyword.value);
+    const keyword = e.target.elements.keyword.value;
     if (keyword) {
       url.searchParams.set("keyword", keyword); //add param to url
-    }
-    else{
+    } else {
       url.searchParams.delete("keyword");
     }
-    window.location.href = url.href 
-  })
+    window.location.href = url.href;
+  });
 }
+//Form Seach End
+
+//Pagination
+const buttonsPagination = document.querySelectorAll("[button-pagination");
+if (buttonsPagination) {
+  let url = new URL(window.location.href);
+  console.log(buttonsPagination);
+  buttonsPagination.forEach((button) => {
+    button.addEventListener("click", () => {
+      const page = button.getAttribute("button-pagination");
+
+      url.searchParams.set("page", page); //add param to url
+
+      window.location.href = url.href;
+    });
+  });
+}
+
+//+ Back page
+const buttonBack = document.querySelector("[button-back]");
+
+//Pagination End
