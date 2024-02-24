@@ -92,16 +92,21 @@ if (formChangeMulti) {
     e.preventDefault();
     console.log(e);
     const checkboxMulti = document.querySelector("[checkbox-multi]");
-    const inputsChecked = checkboxMulti.querySelectorAll("input[name='id']:checked");
+    const inputsChecked = checkboxMulti.querySelectorAll(
+      "input[name='id']:checked"
+    );
     if (inputsChecked.length > 0) {
-      let ids = [];
-      inputsChecked.forEach((input) => {
-        const id = input.getAttribute("value"); // or input.value
-        ids.push(id);
-      });
+      const isConfirm = confirm(`Are you sure you want to apply all`);
+      if (isConfirm) {
+        let ids = [];
+        inputsChecked.forEach((input) => {
+          const id = input.getAttribute("value"); // or input.value
+          ids.push(id);
+        });
 
-      inputIds.value = ids.join(", ");
-      formChangeMulti.submit();
+        inputIds.value = ids.join(", ");
+        formChangeMulti.submit();
+      }
     } else {
       alert("Please select at least one!");
     }
