@@ -55,6 +55,14 @@ block main
                                     height="auto")
                             td #{item.title}
                             td #{item.price}$
+                            td 
+                                input(
+                                    type="number"
+                                    value=item.position 
+                                    name="position"
+                                    min="1"
+                                    style="width: 60px"
+                                    )
                             td
                                 if(item.status == 'active')
                                     a(href="javascript:;"

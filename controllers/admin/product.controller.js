@@ -3,6 +3,7 @@ const Product = require("../../models/product.model");
 const filterStatusHelper = require("../../helpers/filterStatus");
 const searchHelper = require("../../helpers/search");
 const paginationHelper = require("../../helpers/pagination");
+const { posix } = require("path");
 
 module.exports.index = async (req, res) => {
   //   console.log(req.query.status);
@@ -46,7 +47,7 @@ module.exports.index = async (req, res) => {
 
   const products = await Product.find(find)
     .limit(objectPagination.limitItems)
-    .skip(objectPagination.skip);
+    .skip(objectPagination.skip).sort({position: 'desc'});
 
   res.render("admin/pages/products/index", {
     pageTitle: "Products list",
@@ -80,7 +81,19 @@ module.exports.changeMulti = async (req, res) => {
 
       break;
     case "delete-all":
-      await Product.updateMany({ _id: { $in: ids } }, { deleted: true },{deletedAt: new Date()});
+      await Product.updateMany(
+        { _id: { $in: ids } },
+        { deleted: true },
+        { deletedAt: new Date() }
+      );
+    case "change-position":
+      console.log(ids);
+      for (const item of ids) {
+        const [id, position] = item.split("-");
+        console.log(id, position);
+        await Product.updateOne({ _id: id }, { position: parseInt(position) });
+      }
+
     default:
       break;
   }
@@ -101,7 +114,6 @@ module.exports.deleteItem = async (req, res) => {
 // GET recycle bin
 
 module.exports.recycle = async (req, res) => {
-
   //filter status
   filterStatus = filterStatusHelper(req.query);
 
@@ -161,7 +173,6 @@ module.exports.permanentlyDelete = async (req, res) => {
   res.redirect("back");
 };
 
-
 // PATCH /recycle/restore/:id
 
 module.exports.Restore = async (req, res) => {
@@ -171,4 +182,3 @@ module.exports.Restore = async (req, res) => {
 
   res.redirect("back");
 };
-

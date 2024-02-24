@@ -91,6 +91,8 @@ if (formChangeMulti) {
   formChangeMulti.addEventListener("submit", (e) => {
     e.preventDefault();
     console.log(e);
+    const typeChange = e.target.elements.type.value;
+    console.log(typeChange);
     const checkboxMulti = document.querySelector("[checkbox-multi]");
     const inputsChecked = checkboxMulti.querySelectorAll(
       "input[name='id']:checked"
@@ -101,7 +103,16 @@ if (formChangeMulti) {
         let ids = [];
         inputsChecked.forEach((input) => {
           const id = input.getAttribute("value"); // or input.value
-          ids.push(id);
+          const position = input
+            .closest("tr")
+            .querySelector("input[name = 'position']").value;
+          console.log(position);
+          if (typeChange == "change-position") {
+            const path = id + "-" + position;
+            ids.push(path);
+          } else {
+            ids.push(id);
+          }
         });
 
         inputIds.value = ids.join(", ");

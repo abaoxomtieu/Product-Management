@@ -81,5 +81,4 @@ if (buttonRestore.length > 0) {
       }
     });
   });
-
 }
