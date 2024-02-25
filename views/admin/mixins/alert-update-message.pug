@@ -1,0 +1,6 @@
+mixin alert-update-message(messages)
+    - if (messages.success)
+        .message.success 
+        div(
+            class="alert alert-success" 
+            show-alert) #{messages.success} <span close-alert>x</span>

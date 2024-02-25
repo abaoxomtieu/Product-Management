@@ -15,6 +15,19 @@ if (buttonsChangeStatus.length > 0) {
     });
   });
 }
+//setTimeOut for alert update messages
+const alertCell = document.querySelector("[show-alert]");
+const closeButton = document.querySelector("[close-alert]");
+if (alertCell) {
+  setTimeout(() => {
+    alertCell.classList.add("alert-hidden");
+  }, 3000);
+
+  closeButton.addEventListener("click", () => {
+    alertCell.classList.add("alert-hidden");
+  });
+}
+
 // End change status
 
 // Delete button

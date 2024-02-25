@@ -3,12 +3,15 @@ include ../../mixins/filter-status.pug
 include ../../mixins/search.pug
 include ../../mixins/pagination.pug
 include ../../mixins/form-change-multi.pug
+include ../../mixins/alert-update-message.pug
 
 
 
 
 block main 
     h1 Product list
+    +alert-update-message(messages)
+            
 
     .card.mb-3
         .card-header Filter and search
