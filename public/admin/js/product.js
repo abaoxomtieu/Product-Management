@@ -19,9 +19,10 @@ if (buttonsChangeStatus.length > 0) {
 const alertCell = document.querySelector("[show-alert]");
 const closeButton = document.querySelector("[close-alert]");
 if (alertCell) {
+  const time = alertCell.getAttribute("data-time");
   setTimeout(() => {
     alertCell.classList.add("alert-hidden");
-  }, 3000);
+  }, time);
 
   closeButton.addEventListener("click", () => {
     alertCell.classList.add("alert-hidden");

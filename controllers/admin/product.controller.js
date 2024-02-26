@@ -63,7 +63,7 @@ module.exports.changeStatus = async (req, res) => {
   const status = req.params.status;
   const id = req.params.id;
   await Product.updateOne({ _id: id }, { status: status });
-  req.flash('success', 'Update successfull');
+  req.flash('success', 'Update successful');
 
   res.redirect("back");
 };
@@ -75,11 +75,12 @@ module.exports.changeMulti = async (req, res) => {
   switch (type) {
     case "active":
       await Product.updateMany({ _id: { $in: ids } }, { status: "active" });
+      req.flash('success', `Update successful for ${ids.length} products` );
       break;
 
     case "inactive":
       await Product.updateMany({ _id: { $in: ids } }, { status: "inactive" });
-
+      req.flash('success', `Update successful for ${ids.length} products`);
       break;
     case "delete-all":
       await Product.updateMany(
@@ -87,6 +88,7 @@ module.exports.changeMulti = async (req, res) => {
         { deleted: true },
         { deletedAt: new Date() }
       );
+      req.flash('success', `Delete successful for ${ids.length} products`);
     case "change-position":
       console.log(ids);
       for (const item of ids) {
@@ -94,6 +96,7 @@ module.exports.changeMulti = async (req, res) => {
         console.log(id, position);
         await Product.updateOne({ _id: id }, { position: parseInt(position) });
       }
+      req.flash('success', `Change position successful for ${ids.length} products`);
 
     default:
       break;
@@ -101,7 +104,7 @@ module.exports.changeMulti = async (req, res) => {
 
   res.redirect("back");
 };
-// PATCH delete-item
+// DELETE delete-item
 module.exports.deleteItem = async (req, res) => {
   const id = req.params.id;
 
@@ -109,6 +112,7 @@ module.exports.deleteItem = async (req, res) => {
     { _id: id },
     { deleted: true, deletedAt: new Date() }
   );
+  req.flash('success', `Delete successful for product`);
   res.redirect("back");
 };
 
@@ -165,7 +169,7 @@ module.exports.recycle = async (req, res) => {
   });
 };
 
-// PATCH /recycle/delete/:id
+// DELETE /recycle/delete/:id
 module.exports.permanentlyDelete = async (req, res) => {
   const id = req.params.id;
 

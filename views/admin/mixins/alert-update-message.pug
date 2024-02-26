@@ -1,6 +1,7 @@
-mixin alert-update-message(messages)
+mixin alert-update-message(time)
     - if (messages.success)
         .message.success 
         div(
             class="alert alert-success" 
-            show-alert) #{messages.success} <span close-alert>x</span>
+            show-alert
+            data-time=time) #{messages.success} <span close-alert>x</span>
