@@ -15,7 +15,7 @@ if (buttonsChangeStatus.length > 0) {
     });
   });
 }
-//setTimeOut for alert update messages
+// Alert update messages
 const alertCell = document.querySelector("[show-alert]");
 const closeButton = document.querySelector("[close-alert]");
 if (alertCell) {
@@ -96,3 +96,12 @@ if (buttonRestore.length > 0) {
     });
   });
 }
+
+// Preview img
+var loadFile = function(event) {
+  var output = document.querySelector(".image-preview")
+  output.src = URL.createObjectURL(event.target.files[0]);
+  output.onload = function() {
+    URL.revokeObjectURL(output.src) // free memory
+  }
+};

@@ -4,6 +4,7 @@ const filterStatusHelper = require("../../helpers/filterStatus");
 const searchHelper = require("../../helpers/search");
 const paginationHelper = require("../../helpers/pagination");
 const { posix } = require("path");
+const systemConfig = require("../../config/system")
 
 module.exports.index = async (req, res) => {
   //   console.log(req.query.status);
@@ -47,7 +48,8 @@ module.exports.index = async (req, res) => {
 
   const products = await Product.find(find)
     .limit(objectPagination.limitItems)
-    .skip(objectPagination.skip).sort({position: 'desc'});
+    .skip(objectPagination.skip)
+    .sort({ position: "desc" });
 
   res.render("admin/pages/products/index", {
     pageTitle: "Products list",
@@ -63,7 +65,7 @@ module.exports.changeStatus = async (req, res) => {
   const status = req.params.status;
   const id = req.params.id;
   await Product.updateOne({ _id: id }, { status: status });
-  req.flash('success', 'Update successful');
+  req.flash("success", "Update successful");
 
   res.redirect("back");
 };
@@ -75,12 +77,12 @@ module.exports.changeMulti = async (req, res) => {
   switch (type) {
     case "active":
       await Product.updateMany({ _id: { $in: ids } }, { status: "active" });
-      req.flash('success', `Update successful for ${ids.length} products` );
+      req.flash("success", `Update successful for ${ids.length} products`);
       break;
 
     case "inactive":
       await Product.updateMany({ _id: { $in: ids } }, { status: "inactive" });
-      req.flash('success', `Update successful for ${ids.length} products`);
+      req.flash("success", `Update successful for ${ids.length} products`);
       break;
     case "delete-all":
       await Product.updateMany(
@@ -88,7 +90,7 @@ module.exports.changeMulti = async (req, res) => {
         { deleted: true },
         { deletedAt: new Date() }
       );
-      req.flash('success', `Delete successful for ${ids.length} products`);
+      req.flash("success", `Delete successful for ${ids.length} products`);
     case "change-position":
       console.log(ids);
       for (const item of ids) {
@@ -96,7 +98,10 @@ module.exports.changeMulti = async (req, res) => {
         console.log(id, position);
         await Product.updateOne({ _id: id }, { position: parseInt(position) });
       }
-      req.flash('success', `Change position successful for ${ids.length} products`);
+      req.flash(
+        "success",
+        `Change position successful for ${ids.length} products`
+      );
 
     default:
       break;
@@ -112,7 +117,7 @@ module.exports.deleteItem = async (req, res) => {
     { _id: id },
     { deleted: true, deletedAt: new Date() }
   );
-  req.flash('success', `Delete successful for product`);
+  req.flash("success", `Delete successful for product`);
   res.redirect("back");
 };
 
@@ -186,4 +191,32 @@ module.exports.Restore = async (req, res) => {
   await Product.updateOne({ _id: id }, { deleted: false });
 
   res.redirect("back");
+};
+
+// GET /create
+
+module.exports.create = async (req, res) => {
+  res.render("admin/pages/products/create");
+};
+
+// POST /create
+
+module.exports.createPOST = async (req, res) => {
+  req.body.price = parseInt(req.body.price);
+  req.body.discountPercentage = parseInt(req.body.discountPercentage);
+  req.body.stock = parseInt(req.body.stock);
+  req.body.deleted = parseInt(req.body.stock);
+
+
+  if (req.body.position == "") {
+    const countProducts = await Product.countDocuments({});
+    req.body.position = countProducts + 1;
+  } else {
+    req.body.position = parseInt(req.body.position);
+  }
+  req.body.thumbnail = `/uploads/${req.file.filename}`
+  console.log(req.file)
+  const product = new Product(req.body);
+  await product.save();
+  res.redirect(`${systemConfig.prefixAdmin}/products`);
 };
