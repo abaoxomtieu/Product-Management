@@ -1,14 +1,16 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert-update-message.pug
 
-
 block main
-
-    h1(class="mb-4") Add new product
     +alert-update-message-error(5000)
+    +alert-update-message-error(5000)
+
+    h1(class="mb-4") Edit product
+
+
     form(
-        action=`${prefixAdmin}/products/create`
-        id="form-create-product"
+        action=`${prefixAdmin}/products/edit/${product.id}?_method=PATCH`
+        id="form-edit-product"
         method="POST"
         enctype="multipart/form-data"
     )
@@ -20,6 +22,7 @@ block main
                 id="title"
                 name="title"
                 required
+                value=product.title
             )
         //- div(class="form-group")
         //-     label(for="product_category_id") Danh mục  
@@ -28,9 +31,9 @@ block main
         //-         id="product_category_id"
         //-         class="form-control"
         //-     )
-        //-         option(value="") -- Chọn danh mục --
+        //-         option(value="") -- Chọn danh mục  --
         //-         if(category)
-        //-             +select-tree(category)
+        //-             +select-tree(category, 1, product.product_category_id)
         //- div(class="form-group form-check form-check-inline")
         //-     input(
         //-             type="radio"
@@ -38,6 +41,7 @@ block main
         //-             id="featured1"
         //-             name="featured"
         //-             value="1"
+        //-             checked=(product.featured  == "1" ? true : false)
         //-     )
         //-     label(for="featured1" class="form-check-label") Nổi bật
         //- div(class="form-group form-check form-check-inline")
@@ -47,7 +51,7 @@ block main
         //-         id="featured0"
         //-         name="featured"
         //-         value="0"
-        //-         checked
+        //-         checked=(product.featured == "0" ? true : false)
         //-     )
         //-     label(for="featured0" class="form-check-label") Không
         div(class="form-group")
@@ -57,10 +61,8 @@ block main
                 id="desc"
                 name="description"
                 rows="5"
-            )
-
-            
-    
+                
+            ) #{product.description}
         div(class="form-group")
             label(for="price") Price
             input(
@@ -68,8 +70,9 @@ block main
                 class="form-control"
                 id="price"
                 name="price"
-                value="0"
+                value=product.price
                 min="0"
+                
             )
         div(class="form-group")
             label(for="discount") % Discount
@@ -78,7 +81,7 @@ block main
                 class="form-control"
                 id="discount"
                 name="discountPercentage"
-                value="0"
+                value=product.discountPercentage
                 min="0"
             )
         div(class="form-group")
@@ -88,7 +91,7 @@ block main
                 class="form-control"
                 id="stock"
                 name="stock"
-                value="0"
+                value=product.stock
                 min="0"
             )
             
@@ -97,17 +100,21 @@ block main
             upload-image
         )
             label(for="thumbnail") Image
-            input(
-                type="file" 
-                class="form-control-file"
-                id="thumbnail"
-                name="thumbnail"
-                accept="image/*"
-                upload-image-input
-                onchange="loadFile(event)"
-            )
+            .row 
+                .col-6 
+                    input(
+                        type="file" 
+                        class="form-control-file"
+                        id="thumbnail"
+                        name="thumbnail"
+                        accept="image/*"
+                        upload-image-input
+                    )
+                .col-6
+                    div(class="btn btn-light" deleteImgButton) X Delete img
             img(
-                src=""
+                src=product.thumbnail
+                upload-image-preview
                 class="image-preview"
             )
         div(class="form-group")
@@ -119,6 +126,7 @@ block main
                 name="position"
                 placeholder="Tự động tăng"
                 min="1"
+                value=product.position 
             )
         div(class="form-group form-check form-check-inline")
             input(
@@ -127,7 +135,7 @@ block main
                 id="statusActive"
                 name="status"
                 value="active"
-                checked
+                checked=(product.status == "active" ? true : false)
             )
             label(for="statusActive" class="form-check-label") Active
         div(class="form-group form-check form-check-inline")
@@ -137,13 +145,14 @@ block main
                 id="statusInActive"
                 name="status"
                 value="inactive"
+                checked=(product.status == "inactive" ? true : false)
             )
             label(for="statusInActive" class="form-check-label") Inactive
         div(class="form-group")
             button(
                 type="submit"
                 class="btn btn-primary"
-            ) Tạo mới
+            ) Modify
     
     script(src="/admin/js/product.js")
 

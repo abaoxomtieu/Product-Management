@@ -11,7 +11,7 @@ include ../../mixins/alert-update-message.pug
 block main 
     h1 Product list
     +alert-update-message("3000")
-            
+
 
     .card.mb-3
         .card-header Filter and search
@@ -88,13 +88,20 @@ block main
                                         button-change-status
                                         class="badge badge-danger") Inactive
                                 td 
-                                    button(
+                                    a(  href = `${prefixAdmin}/products/detail/${item.id}`
+                                        class="btn btn-secondary btn-sm" 
+                                        ) Detail
+                                        
+                                    a(  href = `${prefixAdmin}/products/edit/${item.id}`
                                         class="btn btn-warning btn-sm" 
+
                                         ) Modify
+
                                     button(
                                         class="btn btn-danger btn-sm ml-1" 
                                         data-id=item.id
                                         button-delete ) Delete
+
 
     +pagination(pagination)
 

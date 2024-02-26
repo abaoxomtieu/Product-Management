@@ -4,7 +4,7 @@ const filterStatusHelper = require("../../helpers/filterStatus");
 const searchHelper = require("../../helpers/search");
 const paginationHelper = require("../../helpers/pagination");
 const { posix } = require("path");
-const systemConfig = require("../../config/system")
+const systemConfig = require("../../config/system");
 
 module.exports.index = async (req, res) => {
   //   console.log(req.query.status);
@@ -205,8 +205,6 @@ module.exports.createPOST = async (req, res) => {
   req.body.price = parseInt(req.body.price);
   req.body.discountPercentage = parseInt(req.body.discountPercentage);
   req.body.stock = parseInt(req.body.stock);
-  req.body.deleted = parseInt(req.body.stock);
-
 
   if (req.body.position == "") {
     const countProducts = await Product.countDocuments({});
@@ -214,9 +212,65 @@ module.exports.createPOST = async (req, res) => {
   } else {
     req.body.position = parseInt(req.body.position);
   }
-  req.body.thumbnail = `/uploads/${req.file.filename}`
-  console.log(req.file)
+
+  if (req.file) {
+    req.body.thumbnail = `/uploads/${req.file.filename}`;
+  }
+
   const product = new Product(req.body);
   await product.save();
   res.redirect(`${systemConfig.prefixAdmin}/products`);
+};
+
+// GET edit/:id
+module.exports.edit = async (req, res) => {
+  try {
+    const id = req.params.id;
+    let find = {
+      _id: id,
+      deleted: false,
+    };
+
+    product = await Product.findOne(find);
+    // console.log(product);
+    res.render("admin/pages/products/edit", { product: product });
+  } catch (error) {
+    res.redirect(`${systemConfig.prefixAdmin}/products`);
+  }
+};
+// PATCH edit/:id
+module.exports.editPatch = async (req, res) => {
+  console.log(req.body);
+  req.body.price = parseInt(req.body.price);
+  req.body.discountPercentage = parseInt(req.body.discountPercentage);
+  req.body.stock = parseInt(req.body.stock);
+
+  if (req.body.position == "") {
+    const countProducts = await Product.countDocuments({});
+    req.body.position = countProducts + 1;
+  } else {
+    req.body.position = parseInt(req.body.position);
+  }
+
+  if (req.file) {
+    req.body.thumbnail = `/uploads/${req.file.filename}`;
+  }
+  console.log(req.body)
+  await Product.updateOne(req.body);
+  res.redirect("back");
+};
+
+module.exports.detail = async (req, res) => {
+  try {
+    const id = req.params.id;
+    let find = {
+      _id: id,
+      deleted: false,
+    };
+
+    product = await Product.findOne(find);
+    res.render("admin/pages/products/detail", { pageTitle: product.title ,product: product });
+  } catch (error) {
+    res.redirect(`${systemConfig.prefixAdmin}/products`);
+  }
 };

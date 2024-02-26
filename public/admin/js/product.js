@@ -98,10 +98,16 @@ if (buttonRestore.length > 0) {
 }
 
 // Preview img
-var loadFile = function(event) {
-  var output = document.querySelector(".image-preview")
+var loadFile = function (event) {
+  var output = document.querySelector(".image-preview");
   output.src = URL.createObjectURL(event.target.files[0]);
-  output.onload = function() {
-    URL.revokeObjectURL(output.src) // free memory
-  }
+  output.onload = function () {
+    URL.revokeObjectURL(output.src); // free memory
+  };
 };
+
+const imgPreview = document.querySelector("[upload-image-preview]");
+const deleteImagePreview = document.querySelector("[deleteImgButton]");
+deleteImagePreview.addEventListener("click", () => {
+  imgPreview.src = "";
+});
