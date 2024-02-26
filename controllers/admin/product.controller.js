@@ -213,9 +213,6 @@ module.exports.createPOST = async (req, res) => {
     req.body.position = parseInt(req.body.position);
   }
 
-  if (req.file) {
-    req.body.thumbnail = `/uploads/${req.file.filename}`;
-  }
 
   const product = new Product(req.body);
   await product.save();
@@ -252,9 +249,6 @@ module.exports.editPatch = async (req, res) => {
     req.body.position = parseInt(req.body.position);
   }
 
-  if (req.file) {
-    req.body.thumbnail = `/uploads/${req.file.filename}`;
-  }
   console.log(req.body)
   await Product.updateOne(req.body);
   res.redirect("back");
