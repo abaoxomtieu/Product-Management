@@ -125,5 +125,38 @@ if (formChangeMulti) {
 }
 // End Form Change Multi
 
-//
+//Sort
 
+const sort = document.querySelector("[sort]");
+const sortSelect = sort.querySelector("[sort-select]");
+const clearButton = document.querySelector("[sort-clear]");
+console.log(clearButton);
+if (sort) {
+  let url = new URL(window.location.href);
+  sortSelect.addEventListener("change", (e) => {
+    value = e.target.value;
+    const [sortKey, sortValue] = e.target.value.split("-");
+    console.log(sortKey);
+    console.log(sortValue);
+    url.searchParams.set("sortKey", sortKey);
+    url.searchParams.set("sortValue", sortValue);
+    window.location.href = url.href;
+  });
+  clearButton.addEventListener("click", () => {
+    url.searchParams.delete("sortKey", sortKey);
+    url.searchParams.delete("sortValue", sortValue);
+    window.location.href = url.href;
+  });
+  // add selected option
+  const sortKey = url.searchParams.get("sortKey");
+  const sortValue = url.searchParams.get("sortValue");
+  if (sortKey && sortValue) {
+    console.log(sortKey);
+    console.log(sortValue);
+    //"position-desc"
+    const optionValue = sortKey.concat("-", sortValue);
+    const optionSelected = sort.querySelector(`option[value="${optionValue}`);
+    optionSelected.selected = true;
+    console.log(optionSelected);
+  }
+}

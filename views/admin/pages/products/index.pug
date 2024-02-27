@@ -4,6 +4,7 @@ include ../../mixins/search.pug
 include ../../mixins/pagination.pug
 include ../../mixins/form-change-multi.pug
 include ../../mixins/alert-update-message.pug
+include ../../mixins/sort
 
 
 
@@ -21,6 +22,12 @@ block main
                     +filter-status(filterStatus)
                 .col-6
                     +search(keyword)
+    .card.mb-3
+      .card-header Sắp xếp
+      .card-body
+        .row
+          .col-4
+            +sort() 
 
 
     .card.mb-3
@@ -46,6 +53,7 @@ block main
                             th Image
                             th Name 
                             th Price 
+                            th Position
                             th Status 
                             th Action 
                     tbody

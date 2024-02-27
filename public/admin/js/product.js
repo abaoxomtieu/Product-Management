@@ -108,6 +108,7 @@ var loadFile = function (event) {
 
 const imgPreview = document.querySelector("[upload-image-preview]");
 const deleteImagePreview = document.querySelector("[deleteImgButton]");
-deleteImagePreview.addEventListener("click", () => {
-  imgPreview.src = "";
-});
+if (deleteImagePreview)
+  deleteImagePreview.addEventListener("click", () => {
+    imgPreview.src = "";
+  });
