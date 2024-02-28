@@ -1,10 +1,10 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert-update-message.pug
-//- include ../../mixins/select-tree.pug
+include ../../mixins/select-tree.pug
 
 block main
   //- if(role.permissions.includes("products-category_view"))
-  h1(class="mb-4") Thêm mới danh mục sản phẩm
+  h1(class="mb-4") Add new product category
 
   +alert-update-message-error(5000)
 
@@ -14,7 +14,7 @@ block main
     enctype="multipart/form-data"
   )
     div(class="form-group")
-      label(for="title") Tiêu đề
+      label(for="title") Title 
       input(
         type="text"
         class="form-control"
@@ -23,25 +23,19 @@ block main
         required
       )
     div(class="form-group")
-      label(for="parent_id") Danh mục cha 
-      //- select(
-      //-   name="parent_id"
-      //-   id="parent_id"
-      //-   class="form-control"
-      //- )
-      input(
-        type="text"
-        class="form-control"
-        id="parent_id"
+      label(for="parent_id") Parent categorires 
+      select(
         name="parent_id"
-        
+        id="parent_id"
+        class="form-control"
       )
-        //- option(value="") -- Chọn danh mục cha --
-        //- if(records)
-        //-   +select-tree(records)
+
+        option(value="") -- Select parent categorires  --
+        if(records)
+          +select-tree(records)
 
     div(class="form-group")
-      label(for="desc") Mô tả
+      label(for="desc") Description
       textarea(
         class="form-control textarea-mce"
         id="desc"
@@ -52,7 +46,7 @@ block main
       class="form-group"
       upload-image
     )
-      label(for="thumbnail") Ảnh
+      label(for="thumbnail") Thumbnail
       input(
         type="file"
         class="form-control-file"
@@ -67,7 +61,7 @@ block main
         class="image-preview"
       )
     div(class="form-group")
-      label(for="position") Vị trí
+      label(for="position") Position
       input(
         type="number"
         class="form-control"
@@ -85,7 +79,7 @@ block main
         value="active"
         checked
       )
-      label(for="statusActive" class="form-check-label") Hoạt động
+      label(for="statusActive" class="form-check-label") Active
     div(class="form-group form-check form-check-inline")
       input(
         type="radio"
@@ -94,9 +88,9 @@ block main
         name="status"
         value="inactive"
       )
-      label(for="statusInActive" class="form-check-label") Dừng hoạt động
+      label(for="statusInActive" class="form-check-label") Inactive
     div(class="form-group")
       button(
         type="submit"
         class="btn btn-primary"
-      ) Tạo mới
+      ) Create

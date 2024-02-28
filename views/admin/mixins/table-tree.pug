@@ -26,7 +26,6 @@ mixin table-tree(items, level = 1)
                     name="position"
                 )
             td
-                //- if(role.permissions.includes("products-category_edit"))
 
                 if(item.status == "active")
                     a(
@@ -49,12 +48,10 @@ mixin table-tree(items, level = 1)
                     href=`${prefixAdmin}/products-category/detail/${item.id}`
                     class="btn btn-secondary btn-sm"
                     ) Chi tiết
-                //- if(role.permissions.includes("products-category_edit"))
                 a(
                     href=`${prefixAdmin}/products-category/edit/${item.id}`
                     class="btn btn-warning btn-sm"
                     ) Sửa
-                //- if(role.permissions.includes("products-category_delete"))
                 button(
                     class="btn btn-danger btn-sm ml-1"
                     button-delete
