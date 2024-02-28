@@ -4,10 +4,10 @@ include  ../../mixins/table-tree.pug
 
 block main
   
-  h1 Danh mục sản phẩm
+  h1 Products categories
 
   .card.mb-3
-    .card-header Danh sách
+    .card-header List
       .card-body
         .row
           .col-8
@@ -15,7 +15,7 @@ block main
             a(
               href=`${prefixAdmin}/products-category/create`
               class="btn btn-outline-success"
-            ) + Thêm mới
+            ) + Add
 
         table(
           class="table table-hover table-sm"
@@ -25,12 +25,12 @@ block main
             tr
               th
                 input(type="checkbox" name="checkall")
-              th STT
-              th Hình ảnh
-              th Tiêu đề
-              th Vị trí
-              th Trạng thái
-              th Hành động
+              th Id
+              th Thumbnai
+              th Title
+              th Position
+              th Status
+              th Action
 
           tbody
             +table-tree(records)

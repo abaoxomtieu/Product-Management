@@ -263,6 +263,8 @@ module.exports.editPatch = async (req, res) => {
   res.redirect("back");
 };
 
+
+// GET detail/:id
 module.exports.detail = async (req, res) => {
   try {
     const id = req.params.id;

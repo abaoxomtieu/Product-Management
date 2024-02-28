@@ -18,5 +18,13 @@ router.post(
   validate.createPOST,
   controller.createPOST
 );
+router.get("/edit/:id",controller.edit)
+router.patch(
+  "/edit/:id",
+  fileUpload.single("thumbnail"),
+  uploadCloud.upload,
+  validate.createPOST,
+  controller.editPatch
+);
 
 module.exports = router;
