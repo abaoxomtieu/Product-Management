@@ -1,5 +1,7 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert-update-message.pug
+include ../../mixins/select-tree.pug
+
 
 
 block main
@@ -21,16 +23,16 @@ block main
                 name="title"
                 required
             )
-        //- div(class="form-group")
-        //-     label(for="product_category_id") Danh mục  
-        //-     select(
-        //-         name="product_category_id"
-        //-         id="product_category_id"
-        //-         class="form-control"
-        //-     )
-        //-         option(value="") -- Chọn danh mục --
-        //-         if(category)
-        //-             +select-tree(category)
+        div(class="form-group")
+            label(for="product_category_id") Danh mục  
+            select(
+                name="product_category_id"
+                id="product_category_id"
+                class="form-control"
+            )
+                option(value="") -- Chọn danh mục --
+                if(category)
+                    +select-tree(category)
         //- div(class="form-group form-check form-check-inline")
         //-     input(
         //-             type="radio"
@@ -50,14 +52,14 @@ block main
         //-         checked
         //-     )
         //-     label(for="featured0" class="form-check-label") Không
-        div(class="form-group")
-            label(for="desc") Description
-            textarea(
-                class="form-control textarea-mce"
-                id="desc"
-                name="description"
-                rows="5"
-            )
+        //- div(class="form-group")
+        //-     label(for="desc") Description
+        //-     textarea(
+        //-         class="form-control textarea-mce"
+        //-         id="desc"
+        //-         name="description"
+        //-         rows="5"
+        //-     )
 
             
     

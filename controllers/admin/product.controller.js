@@ -1,5 +1,7 @@
 // GET  /admin/products
 const Product = require("../../models/product.model");
+const ProductCategory = require("../../models/product-category.model");
+const createTreeHelper = require("../../helpers/createTree");
 const filterStatusHelper = require("../../helpers/filterStatus");
 const searchHelper = require("../../helpers/search");
 const paginationHelper = require("../../helpers/pagination");
@@ -47,12 +49,12 @@ module.exports.index = async (req, res) => {
   //End panigation
 
   // Sort
-    let sort = {}
-    if(req.query.sortKey && req.query.sortValue){
-      sort[req.query.sortKey] = req.query.sortValue
-    } else {
-      sort.position = "desc"
-    }
+  let sort = {};
+  if (req.query.sortKey && req.query.sortValue) {
+    sort[req.query.sortKey] = req.query.sortValue;
+  } else {
+    sort.position = "desc";
+  }
 
   // End Sort
   const products = await Product.find(find)
@@ -205,7 +207,9 @@ module.exports.Restore = async (req, res) => {
 // GET /create
 
 module.exports.create = async (req, res) => {
-  res.render("admin/pages/products/create");
+  const category = await ProductCategory.find({ deleted: false });
+  const newCategory = createTreeHelper.tree(category);
+  res.render("admin/pages/products/create", { category: newCategory });
 };
 
 // POST /create
@@ -222,7 +226,6 @@ module.exports.createPOST = async (req, res) => {
     req.body.position = parseInt(req.body.position);
   }
 
-
   const product = new Product(req.body);
   await product.save();
   res.redirect(`${systemConfig.prefixAdmin}/products`);
@@ -238,8 +241,12 @@ module.exports.edit = async (req, res) => {
     };
 
     product = await Product.findOne(find);
-    // console.log(product);
-    res.render("admin/pages/products/edit", { product: product });
+    const category = await ProductCategory.find({ deleted: false });
+    const newCategory = createTreeHelper.tree(category);
+    res.render("admin/pages/products/edit", {
+      product: product,
+      category: newCategory,
+    });
   } catch (error) {
     res.redirect(`${systemConfig.prefixAdmin}/products`);
   }
@@ -258,11 +265,10 @@ module.exports.editPatch = async (req, res) => {
     req.body.position = parseInt(req.body.position);
   }
 
-  console.log(req.body)
+  console.log(req.body);
   await Product.updateOne(req.body);
   res.redirect("back");
 };
-
 
 // GET detail/:id
 module.exports.detail = async (req, res) => {
@@ -274,7 +280,10 @@ module.exports.detail = async (req, res) => {
     };
 
     product = await Product.findOne(find);
-    res.render("admin/pages/products/detail", { pageTitle: product.title ,product: product });
+    res.render("admin/pages/products/detail", {
+      pageTitle: product.title,
+      product: product,
+    });
   } catch (error) {
     res.redirect(`${systemConfig.prefixAdmin}/products`);
   }
