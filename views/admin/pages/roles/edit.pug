@@ -4,8 +4,8 @@ include ../../mixins/alert-update-message.pug
 block main
   h1(class="mb-4") Chỉnh sửa nhóm quyền
 
-  +alert-update-message(5000)
-  +alert-update-message-error(5000)
+  +alert-update-message(3000)
+  +alert-update-message-error(3000)
 
   form(
     action=`${prefixAdmin}/roles/edit/${data.id}?_method=PATCH`
