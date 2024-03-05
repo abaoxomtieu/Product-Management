@@ -1,10 +1,11 @@
 const flash = require("express-flash");
+const moment = require("moment");
 const cookieParser = require("cookie-parser");
 const express = require("express");
 const bodyParser = require("body-parser");
 const methodOverride = require("method-override");
 const session = require("express-session");
-const path = require('path');
+const path = require("path");
 require("dotenv").config();
 
 const database = require("./config/database");
@@ -38,7 +39,7 @@ app.use(
 
 // App Locals Variables
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
-
+app.locals.moment = moment;
 app.use(express.static(`${__dirname}/public`));
 
 //Routes

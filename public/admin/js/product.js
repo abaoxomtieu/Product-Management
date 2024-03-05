@@ -98,17 +98,22 @@ if (buttonRestore.length > 0) {
 }
 
 // Preview img
-var loadFile = function (event) {
-  var output = document.querySelector(".image-preview");
-  output.src = URL.createObjectURL(event.target.files[0]);
-  output.onload = function () {
-    URL.revokeObjectURL(output.src); // free memory
-  };
-};
-
 const imgPreview = document.querySelector("[upload-image-preview]");
 const deleteImagePreview = document.querySelector("[deleteImgButton]");
 if (deleteImagePreview)
   deleteImagePreview.addEventListener("click", () => {
     imgPreview.src = "";
   });
+
+const uploadImage = document.querySelector("[upload-image]");
+if(uploadImage) {
+    const uploadImageInput = document.querySelector("[upload-image-input]");
+    const uploadImagePreview = document.querySelector("[upload-image-preview]");
+
+    uploadImageInput.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if(file) {
+            uploadImagePreview.src = URL.createObjectURL(file)
+        }
+    })
+}
