@@ -31,7 +31,6 @@ module.exports.create = async (req, res) => {
 // POST  /admin/roles/create
 
 module.exports.createPost = async (req, res) => {
-  console.log(req.body);
   const record = new Role(req.body);
   await record.save();
   res.redirect(`${systemConfig.prefixAdmin}/roles`);
@@ -78,7 +77,6 @@ module.exports.edit = async (req, res) => {
 // PATCH /admin/roles/edit/:id
 module.exports.editPatch = async (req, res) => {
   try {
-    console.log(req.body);
     await Role.updateOne(req.body);
     req.flash("success", "Role has been updated");
     res.redirect("back");
@@ -104,12 +102,10 @@ module.exports.permissions = async (req, res) => {
 // PATCH  /admin/roles/permissions
 
 module.exports.permissionsPatch = async (req, res) => {
-  const permissions = JSON.parse(req.body.permissions)
-  console.log(permissions);
+  const permissions = JSON.parse(req.body.permissions);
   for (const item of permissions) {
-    await Role.updateOne({_id: item.id}, {permissions: item.permissions})
-    
+    await Role.updateOne({ _id: item.id }, { permissions: item.permissions });
   }
-  req.flash("success", "update permissions success")
-  res.redirect('back')
+  req.flash("success", "update permissions success");
+  res.redirect("back");
 };

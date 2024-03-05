@@ -30,8 +30,6 @@ module.exports.create = async (req, res) => {
 
   const newRecords = createTreeHelper.tree(records);
 
-  console.log(newRecords);
-
   res.render("admin/pages/products-category/create", {
     pageTitle: "Tạo danh mục sản phẩm",
     records: newRecords,
@@ -90,7 +88,6 @@ module.exports.edit = async (req, res) => {
 };
 // PATCH /admin/product-category/edit/:id
 module.exports.editPatch = async (req, res) => {
-  console.log(req.body);
   const id = req.params.id;
 
   if (req.body.position == "") {

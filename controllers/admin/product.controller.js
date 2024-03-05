@@ -103,10 +103,8 @@ module.exports.changeMulti = async (req, res) => {
       );
       req.flash("success", `Delete successful for ${ids.length} products`);
     case "change-position":
-      console.log(ids);
       for (const item of ids) {
         const [id, position] = item.split("-");
-        console.log(id, position);
         await Product.updateOne({ _id: id }, { position: parseInt(position) });
       }
       req.flash(
@@ -253,7 +251,6 @@ module.exports.edit = async (req, res) => {
 };
 // PATCH edit/:id
 module.exports.editPatch = async (req, res) => {
-  console.log(req.body);
   req.body.price = parseInt(req.body.price);
   req.body.discountPercentage = parseInt(req.body.discountPercentage);
   req.body.stock = parseInt(req.body.stock);
@@ -265,7 +262,6 @@ module.exports.editPatch = async (req, res) => {
     req.body.position = parseInt(req.body.position);
   }
 
-  console.log(req.body);
   await Product.updateOne(req.body);
   res.redirect("back");
 };
