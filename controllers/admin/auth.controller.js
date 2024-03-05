@@ -4,10 +4,15 @@ const systemConfig = require("../../config/system");
 const Account = require("../../models/account.model");
 const md5 = require("md5");
 
-module.exports.login = (req, res) => {
-  res.render("admin/pages/auth/login", {
-    pageTitle: "Login page",
-  });
+module.exports.login = async (req, res) => {
+  user = await Account.findOne({ token: req.cookies.token });
+  if (user) {
+    res.redirect(`${systemConfig.prefixAdmin}/dashboard`);
+  } else {
+    res.render("admin/pages/auth/login", {
+      pageTitle: "Login page",
+    });
+  }
 };
 module.exports.loginPost = async (req, res) => {
   const email = req.body.email;
@@ -33,14 +38,12 @@ module.exports.loginPost = async (req, res) => {
     return;
   }
 
-  res.cookie("token", user.token)
-  res.redirect(`${systemConfig.prefixAdmin}/dashboard`)
+  res.cookie("token", user.token);
+  res.redirect(`${systemConfig.prefixAdmin}/dashboard`);
 };
 
-
 module.exports.logout = async (req, res) => {
-    // Xóa token trong cookie 
-    res.clearCookie("token");
-    res.redirect(`${systemConfig.prefixAdmin}/auth/login`)
-    
-} 
+  // Xóa token trong cookie
+  res.clearCookie("token");
+  res.redirect(`${systemConfig.prefixAdmin}/auth/login`);
+};
