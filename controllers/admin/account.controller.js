@@ -40,14 +40,51 @@ module.exports.create = async (req, res) => {
 
 // POST  /admin/account/create
 
+// [POST] /admin/accounts/create
 module.exports.createPost = async (req, res) => {
-  const emailExists = await Account.findOne({
-    email: req.body.email,
-    deleted: false,
-  });
-  console.log(emailExists);
-};
+    const emailExist = await Account.findOne({
+        email: req.body.email,
+        deleted: false
+    })
 
+    if(emailExist) {
+        req.flash("error", `Email ${req.body.email} đã tồn tại`)
+        res.redirect("back")
+    }
+    else {
+        req.body.password = md5(req.body.password)
+    
+    const record = new Account(req.body)
+    await record.save();
+
+    res.redirect(`${systemConfig.prefixAdmin}/accounts`);
+    }
+    
+
+    
+
+}// [POST] /admin/accounts/create
+module.exports.createPost = async (req, res) => {
+  const emailExist = await Account.findOne({
+      email: req.body.email,
+      deleted: false
+  })
+
+  if(emailExist) {
+      req.flash("error", `Email ${req.body.email} đã tồn tại`)
+      res.redirect("back")
+  }
+  else {
+      req.body.password = md5(req.body.password)
+  
+  const record = new Account(req.body)
+  await record.save();
+
+  res.redirect(`${systemConfig.prefixAdmin}/accounts`);
+  }
+  
+
+}
 // GET  /admin/account/edit/:id
 
 module.exports.edit = async (req, res) => {
