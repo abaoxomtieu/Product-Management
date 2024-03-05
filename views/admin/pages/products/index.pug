@@ -112,11 +112,11 @@ block main
                     p 
                       +formatDateTime(item.createdBy.createdAt)
                   td 
-                    //- - const updatedBy = item.updatedBy.slice(-1)[0]
-                    //- if(updatedBy)
-                    //-   p #{item.accountFullName}
-                    //-   p 
-                    //-     +formatDateTime(item.createdBy.updatedAt)
+                    - const updatedBy = item.updatedBy.slice(-1)[0]
+                    if(updatedBy)
+                      p #{updatedBy.accountFullName}
+                      p 
+                        +formatDateTime(item.createdBy.updatedAt)
                   td
                     a(
                       href=`${prefixAdmin}/products/detail/${item.id}`
