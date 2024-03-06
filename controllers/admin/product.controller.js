@@ -31,7 +31,7 @@ module.exports.index = async (req, res) => {
 
   let keyword = "";
   if (objectSearch.regex) {
-    find.title = objectSearch.regex;
+    find.title = objectSearch.regex;  
   }
   //End search
 

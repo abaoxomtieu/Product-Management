@@ -9,7 +9,7 @@ include ../../mixins/moment.pug
 
 block main
   if(role.permissions.includes("products_view"))      
-    + alert-update-message(5000)
+    +alert-update-message(5000)
 
     h1 Danh sách sản phẩm
     .card.mb-3

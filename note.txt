@@ -1,0 +1,2 @@
+http://localhost:3000/search?keyword=abc res.query.keyword=abc
+http://localhost:3000/search/:keyword  res.params.keyword=abc
