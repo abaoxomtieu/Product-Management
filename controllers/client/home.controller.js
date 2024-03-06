@@ -1,15 +1,35 @@
-// GET  /
-const ProductCategory = require("../../models/product-category.model");
-const createTreeHelper = require("../../helpers/createTree");
+const Product = require("../../models/product.model")
 
-module.exports.index = async (req, res) => {
-  const productsCategory = await ProductCategory.find({
-    deleted: false,
-  });
+const productsHelper = require("../../helpers/products")
 
-  const newProductsCategory = createTreeHelper.tree(productsCategory);
-  res.render("client/pages/home/index", {
-    pageTitle: "Homepage",
-    layoutProductsCategory: newProductsCategory,
-  });
-};
+// [GET] 
+module.exports.index = async (req, res) => {     
+    // Lấy ra sản phẩm nổi bật
+    const productsFeatured = await Product.find({
+        featured: "1",
+        deleted: false,
+        status: "active"
+    }).limit(6)
+    const newProductsFeatured = productsHelper.priceNewProducts(productsFeatured)
+    
+    // Hết lấy ra sản phẩm nổi bật
+
+
+    // Lấy ra sản phẩm mới nhât
+    const productsNew = await Product.find({
+        deleted: false,
+        status: "active"
+    }).sort({ position: "desc" }).limit(6)
+    
+    const newProductsNew = productsHelper.priceNewProducts(productsNew)
+        
+    // Hết lấy ra sản phẩm mới nhât
+    
+    
+
+    res.render("client/pages/home/index", {
+        pageTitle: "Trang chủ",
+        productsFeatured: newProductsFeatured,
+        productsNew: newProductsNew
+    }) 
+}
