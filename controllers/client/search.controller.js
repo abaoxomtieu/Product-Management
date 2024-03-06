@@ -14,11 +14,9 @@ module.exports.index = async (req, res) => {
       deleted: false,
       status: "active",
     });
-    
+
     newProduct = productsHelper.priceNewProducts(products);
-    console.log(newProduct);
   }
-  
 
   res.render("client/pages/search/index", {
     pageTitle: "Tìm kiếm",
