@@ -212,4 +212,36 @@ module.exports["delete"] = function _callee3(req, res) {
       }
     }
   });
+}; //GET /update/:productId/:quantity
+
+
+module.exports.updateQuantity = function _callee4(req, res) {
+  var cartId, productId, quantity;
+  return regeneratorRuntime.async(function _callee4$(_context4) {
+    while (1) {
+      switch (_context4.prev = _context4.next) {
+        case 0:
+          cartId = req.cookies.cartId;
+          productId = req.params.productId;
+          quantity = req.params.quantity;
+          _context4.next = 5;
+          return regeneratorRuntime.awrap(Cart.updateOne({
+            _id: cartId,
+            "products.product_id": productId
+          }, {
+            $set: {
+              "products.$.quantity": quantity
+            }
+          }));
+
+        case 5:
+          req.flash("success", "Cập nhật số lượng thành công");
+          res.redirect("back");
+
+        case 7:
+        case "end":
+          return _context4.stop();
+      }
+    }
+  });
 };

@@ -42,7 +42,7 @@ block main
                                         value=item.quantity
                                         min="1"
                                         max=item.stock
-                                        item-id=item.id
+                                        product-id=item.id
                                         style="width:60px"
                                         )
                                     td #{item.total}$
@@ -55,3 +55,4 @@ block main
 
                 div(class="text-right mt-3")
                     a(href="/checkout" class="btn btn-success") THANH TOÁN
+    script(src="/js/cart.js") 
