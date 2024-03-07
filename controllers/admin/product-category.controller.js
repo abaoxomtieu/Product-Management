@@ -3,6 +3,9 @@ const ProductCategory = require("../../models/product-category.model");
 const systemConfig = require("../../config/system");
 const filterStatusHelper = require("../../helpers/filterStatus");
 const createTreeHelper = require("../../helpers/createTree");
+const searchHelper = require("../../helpers/search");
+const paginationHelper = require("../../helpers/pagination");
+const { posix } = require("path");
 
 module.exports.index = async (req, res) => {
   //filter status
@@ -11,12 +14,51 @@ module.exports.index = async (req, res) => {
   let find = {
     deleted: false,
   };
+  if (req.query.status) {
+    find.status = req.query.status;
+  }
+  const objectSearch = searchHelper(req.query);
+  if (objectSearch.regex) {
+    find.title = objectSearch.regex;
+  }
+  // //Pagination
+  // countProducts = await Product.countDocuments(find);
+
+  // let objectPagination = paginationHelper(
+  //   {
+  //     currentPage: 1,
+  //     limitItems: 4,
+  //   },
+  //   req.query,
+  //   countProducts
+  // );
+  // const products = await Product.find(find)
+  // .limit(objectPagination.limitItems)
+  // .skip(objectPagination.skip)
+
+  // //End panigation
   const records = await ProductCategory.find(find);
   const newRecords = createTreeHelper.tree(records);
-
+  // console.log(records);
+  // console.log("--------");
+  // console.log(newRecords);
+  if (objectSearch.regex) {
+    a = records;
+  } else {
+    a = newRecords;
+  }
+  console.log(a);
+  const countProductCategoryAll = await ProductCategory.countDocuments({
+    deleted: false,
+    status: "active",
+  });
+  countProductCategory = await ProductCategory.countDocuments(find);
   res.render("admin/pages/products-category/index", {
     pageTitle: "Products category",
-    records: newRecords,
+    records: a,
+    keyword: objectSearch.keyword,
+    countProductCategoryAll: countProductCategoryAll,
+    countProductCategory: countProductCategory,
   });
 };
 

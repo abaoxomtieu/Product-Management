@@ -23,13 +23,12 @@ module.exports.index = async (req, res) => {
     find.status = req.query.status;
   }
   //End filter status
-
   //search
   const objectSearch = searchHelper(req.query);
 
   // console.log(objectSearch)
 
-  let keyword = "";
+  // let keyword = "";
   if (objectSearch.regex) {
     find.title = objectSearch.regex;  
   }

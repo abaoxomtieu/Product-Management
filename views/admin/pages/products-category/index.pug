@@ -1,23 +1,30 @@
 extends ../../layouts/default.pug
 include  ../../mixins/table-tree.pug
+include ../../mixins/search
+include ../../mixins/alert-update-message
+include ../../mixins/filter-status
 
 
 block main
   if(role.permissions.includes("products-category_view"))
-  
-    h1 Danh mục sản phẩm
+    +alert-update-message(5000)
 
+    h1 Danh mục sản phẩm
     .card.mb-3
-      .card-header Danh sách
-        .card-body
-          .row
-            .col-8
-            .col-4
-              if(role.permissions.includes("products-category_create"))
-                a(
-                  href=`${prefixAdmin}/products-category/create`
-                  class="btn btn-outline-success"
-                ) + Thêm mới
+      .card-header Bộ lọc và Tìm kiếm
+      .card-body
+        .row
+          .col-4 
+            +filter-status(filterStatus)
+          .col-4
+            +search(keyword)
+          .col-4
+            if(role.permissions.includes("products-category_create"))
+              a(
+                href=`${prefixAdmin}/products-category/create`
+                class="btn btn-outline-success"
+              ) + Thêm mới
+        div Danh sách các mục sản phẩm
 
           table(
             class="table table-hover table-sm"
@@ -35,4 +42,66 @@ block main
                 th Hành động
 
             tbody
-              +table-tree(records)
+              if(countProductCategoryAll == countProductCategory)
+                +table-tree(records)
+              else
+                each item, index in records
+                  tr 
+                        td
+                            input(
+                                type="checkbox"
+                                name="id"
+                                value=item.id
+                              )
+                        td #{index+1}
+                        td
+                            img(
+                                src=item.thumbnail
+                                alt=item.title
+                                width="100px"
+                                height="auto"
+                              )
+                        td #{prefix}#{item.title} 
+                        td
+                            input(
+                                type="number"
+                                value=item.position
+                                style="width: 60px"
+                                min="1"
+                                name="position"
+                            )
+                        td
+                            if(role.permissions.includes("products-category_edit"))
+
+                                if(item.status == "active")
+                                    a(
+                                    href="javascript:;"
+                                    data-status=item.status
+                                    data-id=item.id
+                                    button-change-status
+                                    class="badge badge-success"
+                                    ) Hoạt động
+                                else
+                                    a(
+                                    href="javascript:;"
+                                    data-status=item.status
+                                    data-id=item.id
+                                    button-change-status
+                                    class="badge badge-danger"
+                                    ) Dừng hoạt động
+                        td
+                            a(
+                                href=`${prefixAdmin}/products-category/detail/${item.id}`
+                                class="btn btn-secondary btn-sm"
+                                ) Chi tiết
+                            if(role.permissions.includes("products-category_edit"))
+                                a(
+                                    href=`${prefixAdmin}/products-category/edit/${item.id}`
+                                    class="btn btn-warning btn-sm"
+                                    ) Sửa
+                            if(role.permissions.includes("products-category_delete"))
+                                button(
+                                    class="btn btn-danger btn-sm ml-1"
+                                    button-delete
+                                        data-id=item.id
+                                ) Xóa     
