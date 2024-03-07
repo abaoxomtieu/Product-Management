@@ -287,7 +287,7 @@ module.exports.createPOST = async (req, res) => {
   req.body.price = parseInt(req.body.price);
   req.body.discountPercentage = parseInt(req.body.discountPercentage);
   req.body.stock = parseInt(req.body.stock);
-
+  console.log(req.file)
   if (req.body.position == "") {
     const countProducts = await Product.countDocuments({});
     req.body.position = countProducts + 1;
@@ -295,8 +295,9 @@ module.exports.createPOST = async (req, res) => {
     req.body.position = parseInt(req.body.position);
   }
   req.body.createdBy = { account_id: res.locals.user.id };
-  // console.log(req.body);
 
+  console.log(req.body);
+  
   const product = new Product(req.body);
   await product.save();
   res.redirect(`${systemConfig.prefixAdmin}/products`);
@@ -330,10 +331,10 @@ module.exports.editPatch = async (req, res) => {
   req.body.stock = parseInt(req.body.stock);
   req.body.position = parseInt(req.body.position);
 
-  if (req.file) {
-    req.body.thumbnail = `/uploads/${req.file.filename}`;
+  if (!req.file) {
+    delete req.body.thumbnail;
   }
-
+  console.log(req.body)
   try {
     const updatedBy = {
       account_id: res.locals.user.id,
@@ -347,6 +348,7 @@ module.exports.editPatch = async (req, res) => {
         $push: { updatedBy: updatedBy },
       }
     );
+    
     req.flash("success", `Đã cập nhật thành công`);
   } catch (error) {
     req.flash("error", `Cập nhật thất bại`);
