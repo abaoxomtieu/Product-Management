@@ -180,4 +180,36 @@ module.exports.addPost = function _callee2(req, res) {
       }
     }
   });
+}; //GET /cart/delete/:id
+
+
+module.exports["delete"] = function _callee3(req, res) {
+  var productId, cartId;
+  return regeneratorRuntime.async(function _callee3$(_context3) {
+    while (1) {
+      switch (_context3.prev = _context3.next) {
+        case 0:
+          productId = req.params.id;
+          cartId = req.cookies.cartId;
+          _context3.next = 4;
+          return regeneratorRuntime.awrap(Cart.updateOne({
+            _id: cartId
+          }, {
+            $pull: {
+              products: {
+                product_id: productId
+              }
+            }
+          }));
+
+        case 4:
+          req.flash("success", "Sản phẩm đã được xóa khỏi giỏ hàng");
+          res.redirect("back");
+
+        case 6:
+        case "end":
+          return _context3.stop();
+      }
+    }
+  });
 };
