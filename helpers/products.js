@@ -15,6 +15,6 @@ module.exports.priceNewProduct = (item) => {
     100
   ).toFixed(0); 
     
-  return priceNew;
+  return parseInt(priceNew);
 
 }
