@@ -3,28 +3,29 @@ include  ../../mixins/table-tree.pug
 include ../../mixins/search
 include ../../mixins/alert-update-message
 include ../../mixins/filter-status
+include ../../mixins/pagination
 
 
 block main
   if(role.permissions.includes("products-category_view"))
     +alert-update-message(5000)
 
-    h1 Danh mục sản phẩm
+    h1 Danh sách Blog
     .card.mb-3
       .card-header Bộ lọc và Tìm kiếm
       .card-body
         .row
-          .col-4 
+          .col-3
             +filter-status(filterStatus)
-          .col-4
+          .col-6
             +search(keyword)
-          .col-4
+          .col-2
             if(role.permissions.includes("products-category_create"))
               a(
-                href=`${prefixAdmin}/products-category/create`
+                href=`${prefixAdmin}/blogs/create`
                 class="btn btn-outline-success"
               ) + Thêm mới
-        div Danh sách các mục sản phẩm
+        div Danh sách các bài viết
 
           table(
             class="table table-hover table-sm"
@@ -36,16 +37,14 @@ block main
                   input(type="checkbox" name="checkall")
                 th STT
                 th Hình ảnh
+                th Danh mục
                 th Tiêu đề
                 th Vị trí
                 th Trạng thái
                 th Hành động
 
             tbody
-              if(countProductCategoryAll == countProductCategory)
-                +table-tree(records)
-              else
-                each item, index in records
+                each item, index in blogs 
                   tr 
                         td
                             input(
@@ -61,7 +60,8 @@ block main
                                 width="100px"
                                 height="auto"
                               )
-                        td #{item.title} 
+                        td #{item.category}
+                        td #{prefix}#{item.title} 
                         td
                             input(
                                 type="number"
@@ -105,3 +105,4 @@ block main
                                     button-delete
                                         data-id=item.id
                                 ) Xóa     
+    +pagination(pagination) 

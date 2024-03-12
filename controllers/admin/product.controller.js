@@ -30,7 +30,7 @@ module.exports.index = async (req, res) => {
 
   // let keyword = "";
   if (objectSearch.regex) {
-    find.title = objectSearch.regex;  
+    find.title = objectSearch.regex;
   }
   //End search
 
@@ -75,6 +75,7 @@ module.exports.index = async (req, res) => {
       });
       updatedBy.accountFullName = userUpdated.fullName;
     }
+    // console.log(products)
   }
 
   res.render("admin/pages/products/index", {
@@ -286,7 +287,7 @@ module.exports.createPOST = async (req, res) => {
   req.body.price = parseInt(req.body.price);
   req.body.discountPercentage = parseInt(req.body.discountPercentage);
   req.body.stock = parseInt(req.body.stock);
-  console.log(req.file)
+  // console.log(req.file)
   if (req.body.position == "") {
     const countProducts = await Product.countDocuments({});
     req.body.position = countProducts + 1;
@@ -295,8 +296,8 @@ module.exports.createPOST = async (req, res) => {
   }
   req.body.createdBy = { account_id: res.locals.user.id };
 
-  console.log(req.body);
-  
+  // console.log(req.body);
+
   const product = new Product(req.body);
   await product.save();
   res.redirect(`${systemConfig.prefixAdmin}/products`);
@@ -333,7 +334,7 @@ module.exports.editPatch = async (req, res) => {
   if (!req.file) {
     delete req.body.thumbnail;
   }
-  console.log(req.body)
+  // console.log(req.body)
   try {
     const updatedBy = {
       account_id: res.locals.user.id,
@@ -347,7 +348,7 @@ module.exports.editPatch = async (req, res) => {
         $push: { updatedBy: updatedBy },
       }
     );
-    
+
     req.flash("success", `Đã cập nhật thành công`);
   } catch (error) {
     req.flash("error", `Cập nhật thất bại`);

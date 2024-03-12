@@ -44,7 +44,6 @@ module.exports.addPost = async (req, res) => {
   const existProductCart = cart.products.find(
     (item) => item.product_id == productId
   );
-  console.log(existProductCart);
   if (existProductCart) {
     const quantityNew = existProductCart.quantity + quantity;
     // use this to set again value of an object in array

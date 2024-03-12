@@ -47,7 +47,6 @@ module.exports.index = async (req, res) => {
   } else {
     a = newRecords;
   }
-  console.log(a);
   const countProductCategoryAll = await ProductCategory.countDocuments({
     deleted: false,
     status: "active",
