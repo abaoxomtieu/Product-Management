@@ -8,13 +8,13 @@ const userSchema = new mongoose.Schema(
     password: String,
     tokenUser: {
       type: String,
-      default: generate.generateRandomString(20)
+      default: generate.generateRandomString(20),
     },
     phone: String,
     avatar: String,
     status: {
       type: String,
-      default: "active"
+      default: "active",
     },
     deleted: {
       type: Boolean,
