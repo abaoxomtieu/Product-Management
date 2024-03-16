@@ -50,6 +50,9 @@ module.exports.loginPost = async (req, res) => {
         //add user_id to cart if don't find any cart have this user_id
         await Cart.updateOne({ _id: req.cookies.cartId }, { user_id: user.id });
       } else {
+        const currentCartId = await Cart.findById(req.cookies.cartId);
+        const mergedProducts = [...cartId.products, ...currentCartId.products];
+        await Cart.updateOne({ _id: cartId.id }, { products: mergedProducts });
         await Cart.deleteOne({_id: req.cookies.cartId})
         res.cookie("cartId", cartId.id);
         
