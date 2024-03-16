@@ -92,7 +92,6 @@ module.exports.forgotPasswordPost = async (req, res) => {
   const existEmail = await ForgotPassword.findOne({ email: email });
   const otp = generateHelpers.generateRandomNumber(8);
   if (!existEmail) {
-    
     const objectForgotPassword = {
       email: email,
       otp: otp,
@@ -108,7 +107,7 @@ module.exports.forgotPasswordPost = async (req, res) => {
   }
   const subject = "Mã OTP xác minh lấy lại mật khẩu";
   const html = `
-  Mã OTP để lấy lại mật khẩu là <b>${otp}</b>. Thời hạn sử dụng là 3 phút` ;
+  Mã OTP để lấy lại mật khẩu là <b>${otp}</b>. Thời hạn sử dụng là 3 phút`;
 
   sendMailHelpers.sendMail(email, subject, html);
   res.redirect(`/user/password/otp?email=${email}`);
@@ -145,12 +144,7 @@ module.exports.otpPasswordPost = async (req, res) => {
 // GET  /user/password/reset
 
 module.exports.resetPassword = async (req, res) => {
-  const tokenUser = req.cookies.tokenUser;
-  const validate = await User.findOne({ tokenUser: tokenUser });
-  if (!validate) {
-    res.redirect("/");
-    return;
-  }
+
   res.render("client/pages/user/reset-password", {
     pageTitle: "Đổi mật khẩu",
   });
@@ -172,4 +166,12 @@ module.exports.resetPasswordPost = async (req, res) => {
   );
   req.flash("success", "Đổi mật khẩu thành công");
   res.redirect("/");
+};
+
+// GET  /user/info
+
+module.exports.info = async (req, res) => {
+  res.render("client/pages/user/info", {
+    pageTitle: "Thông tin tài khoản",
+  });
 };
