@@ -5,7 +5,7 @@ const md5 = require("md5");
 const generateHelpers = require("../../helpers/generate");
 const sendMailHelpers = require("../../helpers/sendMail");
 const { ReturnDocument } = require("mongodb");
-
+const Cart = require("../../models/cart.model");
 // GET  /user/register
 module.exports.register = async (req, res) => {
   res.render("client/pages/user/register", {
@@ -32,7 +32,7 @@ module.exports.registerPost = async (req, res) => {
 
 module.exports.login = async (req, res) => {
   res.render("client/pages/user/login", {
-    pageTitle: "Đăng ký tài khoản",
+    pageTitle: "Đăng nhập",
   });
 };
 
@@ -45,6 +45,15 @@ module.exports.loginPost = async (req, res) => {
   if (user) {
     if (user.password == password) {
       res.cookie("tokenUser", user.tokenUser);
+      const cartId = await Cart.findOne({ user_id: user.id });
+      if (!cartId) {
+        //add user_id to cart if don't find any cart have this user_id
+        await Cart.updateOne({ _id: req.cookies.cartId }, { user_id: user.id });
+      } else {
+        await Cart.deleteOne({_id: req.cookies.cartId})
+        res.cookie("cartId", cartId.id);
+        
+      }
     } else {
       req.flash("error", "Sai mật khẩu");
       res.redirect("back");
@@ -68,13 +77,21 @@ module.exports.loginPost = async (req, res) => {
 
 module.exports.logout = async (req, res) => {
   res.clearCookie("tokenUser");
+  res.clearCookie("cartId")
+  const cart = new Cart();
+  await cart.save();
+  const expiresCookie = 1000 * 60 * 60 * 24 * 365;
+  res.cookie("cartId", cart.id, {
+    expires: new Date(Date.now() + expiresCookie),
+  });
+
   res.redirect("/");
 };
 // GET  /user/password/forgot
 
 module.exports.forgotPassword = async (req, res) => {
   res.render("client/pages/user/forgot-password", {
-    pageTitle: "Forgot Password",
+    pageTitle: "Quên mật khẩu",
   });
 };
 
@@ -144,7 +161,6 @@ module.exports.otpPasswordPost = async (req, res) => {
 // GET  /user/password/reset
 
 module.exports.resetPassword = async (req, res) => {
-
   res.render("client/pages/user/reset-password", {
     pageTitle: "Đổi mật khẩu",
   });
@@ -171,6 +187,8 @@ module.exports.resetPasswordPost = async (req, res) => {
 // GET  /user/info
 
 module.exports.info = async (req, res) => {
+  const tokenUser = req.cookies.tokenUser;
+
   res.render("client/pages/user/info", {
     pageTitle: "Thông tin tài khoản",
   });
