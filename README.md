@@ -1,9 +1,10 @@
 # Product-Management
 - NodeJS Backend
+- SocketIO
 - Pug Engine
 - JavaScript
 - CSS
-- 
+  
 Link demo: https://abaoxomtieu-shop-product.vercel.app/
 
 ## Client site
