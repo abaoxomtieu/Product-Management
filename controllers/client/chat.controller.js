@@ -4,6 +4,8 @@ const User = require("../../models/user.model");
 module.exports.index = async (req, res) => {
   // get user_id from middleware
   const userId = res.locals.user.id;
+  const fullName = res.locals.user.fullName;
+
   //SocketIO
   _io.once("connection", (socket) => {
     socket.on("CLIENT_SEND_MESSAGE", async (content) => {
@@ -12,8 +14,15 @@ module.exports.index = async (req, res) => {
         content: content,
       });
       await chat.save();
+      //Return data to client
+      _io.emit("SERVER_RETURN_MESSAGE", {
+        userId: userId,
+        fullName: fullName,
+        content: content,
+      });
     });
   });
+
   //End SocketIO
 
   // Extract data from database

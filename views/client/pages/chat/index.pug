@@ -11,10 +11,7 @@ block main
 
     .row
       .col-12
-        .chat
-          //- .inner-head
-          //-   .inner-avatar EY
-          //-   .inner-name Em Yêu
+        .chat(my-id=user.id)
           .inner-body
             each chat in chats
               div(class=(chat.user_id == user.id ? "inner-outgoing": "inner-incoming"))
@@ -22,15 +19,15 @@ block main
                   .inner-name #{chat.infoUser.fullName}
                 .inner-content
                   |#{chat.content}
-
-            form(
-              class="inner-form"
-              action=""
+          .inner-foot
+          form(
+            class="inner-form"
+            action=""
+          )
+            input(
+              type="text"
+              placeholder="Nhập nội dung..."
+              name="content"
             )
-              input(
-                type="text"
-                placeholder="Nhập nội dung..."
-                name="content"
-              )
-              button
-                i(class="fa-regular fa-paper-plane")
+            button
+              i(class="fa-regular fa-paper-plane")
