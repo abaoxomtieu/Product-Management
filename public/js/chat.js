@@ -1,4 +1,13 @@
 import * as Popper from "https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm/index.js";
+// file-upload-with-preview
+const upload = new FileUploadWithPreview.FileUploadWithPreview(
+  "upload-images",
+  {
+    multiple: true,
+    maxFileCount: 6,
+  }
+);
+// End file-upload-with-preview
 
 // CLIENT SEND MESSAGE
 
@@ -7,10 +16,16 @@ if (formSendData) {
   formSendData.addEventListener("submit", (e) => {
     e.preventDefault();
     const content = e.target.content.value;
-    if (content) {
-      socket.emit("CLIENT_SEND_MESSAGE", content);
+    const images = upload.cachedFileArray;
+
+    if (content || images.length > 0) {
+      socket.emit("CLIENT_SEND_MESSAGE", {
+        content: content,
+        images: images,
+      });
       // reset input field after send
       e.target.content.value = "";
+      upload.resetPreviewPanel(); // clear all selected images
       // clear typing when message sent
       socket.emit("CLIENT_SEND_TYPING", "hidden");
     }
@@ -24,6 +39,8 @@ socket.on("SERVER_RETURN_MESSAGE", (data) => {
   const boxTyping = document.querySelector(".inner-list-typing");
   div.classList.add(data.userId == myId ? "inner-outgoing" : "inner-incoming");
   let htmlFullName = "";
+  let htmlContent = "";
+  let htmlImages = "";
 
   if (data.userId == myId) {
     div.classList.add("inner-outgoing");
@@ -31,9 +48,24 @@ socket.on("SERVER_RETURN_MESSAGE", (data) => {
     htmlFullName = `<div class="inner-name">${data.fullName}</div>`;
     div.classList.add("inner-incoming");
   }
+  if (data.content) {
+    htmlContent = `
+    <div class="inner-content">${data.content}</div>
+    `;
+  }
+  if(data.images.length > 0){
+    htmlImages += `<div class="inner-images">`
+
+    for (const image of data.images) {
+      htmlImages += `<img src="${image}">`
+    }
+    htmlImages += `</div>`;
+  }
+
   div.innerHTML = `
         ${htmlFullName}
-        <div class="inner-content">${data.content}</div>
+        ${htmlContent}
+        ${htmlImages}
         `;
   // Insert before boxTyping
   body.insertBefore(div, boxTyping);
@@ -85,8 +117,8 @@ if (emojiPicker) {
   emojiPicker.addEventListener("emoji-click", (event) => {
     const icon = event.detail.unicode;
     input.value = input.value + icon;
-    const end = input.value.length
-     //move cursor to end of input
+    const end = input.value.length;
+    //move cursor to end of input
     input.setSelectionRange(end, end);
     input.focus();
 
