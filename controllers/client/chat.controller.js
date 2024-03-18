@@ -21,6 +21,16 @@ module.exports.index = async (req, res) => {
         content: content,
       });
     });
+    //Typing
+    socket.on("CLIENT_SEND_TYPING", (type) => {
+      console.log(type);
+      //broadcast use to return all but without sender
+      socket.broadcast.emit("SEVER_RETURN_TYPING", {
+        userId: userId,
+        fullName: fullName,
+        type: type,
+      });
+    });
   });
 
   //End SocketIO
