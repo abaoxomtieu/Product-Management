@@ -14,7 +14,9 @@ block main
         .chat(my-id=user.id)
           .inner-body
             each chat in chats
-              div(class=(chat.user_id == user.id ? "inner-outgoing": "inner-incoming"))
+              div(class=(chat.user_id == user.id ? "inner-outgoing": "inner-incoming") id=chat._id)
+                if(chat.user_id == user.id )
+                  button(class ='btn btn-danger' delete id=chat._id ) x 
                 if(chat.user_id != user.id && chat.infoUser)
                   .inner-name #{chat.infoUser.fullName}
                 if(chat.content)
@@ -30,7 +32,7 @@ block main
             div(
               class="custom-file-container" 
               data-upload-id="upload-images")
-            
+
 
 
           .inner-foot

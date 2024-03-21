@@ -54,11 +54,11 @@ socket.on("SERVER_RETURN_MESSAGE", (data) => {
     <div class="inner-content">${data.content}</div>
     `;
   }
-  if(data.images.length > 0){
-    htmlImages += `<div class="inner-images">`
+  if (data.images.length > 0) {
+    htmlImages += `<div class="inner-images">`;
 
     for (const image of data.images) {
-      htmlImages += `<img src="${image}">`
+      htmlImages += `<img src="${image}">`;
     }
     htmlImages += `</div>`;
   }
@@ -69,7 +69,7 @@ socket.on("SERVER_RETURN_MESSAGE", (data) => {
         ${htmlImages}
         `;
   // Insert before boxTyping
-  body.insertBefore(div, boxTyping)
+  body.insertBefore(div, boxTyping);
   scrollChatToBottom();
   //Preview images
   const gallery = new Viewer(div);
@@ -175,7 +175,28 @@ if (elementListTyping) {
 
 // Preview Full Image
 const bodyChatPreviewImage = document.querySelector(".chat .inner-body");
-if(bodyChatPreviewImage){
+if (bodyChatPreviewImage) {
   const gallery = new Viewer(bodyChatPreviewImage);
 }
 // End Preview Full Image
+
+//SERVER_DELETE_MESSAGE
+const deletedMessage = document.querySelectorAll("[delete]");
+const bodyChat = document.querySelector(".chat .inner-body");
+if (deletedMessage) {
+  deletedMessage.forEach((button) => {
+    button.addEventListener("click", () => {
+      const isConfirm = confirm(`Are you sure you want to delete`);
+      if (isConfirm) {
+        const id = button.getAttribute("id");
+        const cellMessage = document.querySelector(
+          `.inner-outgoing[id="${id}"]`
+        );
+        if (cellMessage) {
+          cellMessage.remove();
+        }
+        socket.emit("SERVER_DELETE_MESSAGE", id);
+      }
+    });
+  });
+}

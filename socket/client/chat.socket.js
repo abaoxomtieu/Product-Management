@@ -41,5 +41,9 @@ module.exports = (res) => {
       });
       //End Typing
     });
+    //Delete message
+    socket.on("SERVER_DELETE_MESSAGE", async (chat_id) => {
+      await Chat.deleteOne({ _id: chat_id });
+    });
   });
 };
