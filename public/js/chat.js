@@ -1,4 +1,5 @@
 import * as Popper from "https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm/index.js";
+
 // file-upload-with-preview
 const upload = new FileUploadWithPreview.FileUploadWithPreview(
   "upload-images",
@@ -68,8 +69,10 @@ socket.on("SERVER_RETURN_MESSAGE", (data) => {
         ${htmlImages}
         `;
   // Insert before boxTyping
-  body.insertBefore(div, boxTyping);
+  body.insertBefore(div, boxTyping)
   scrollChatToBottom();
+  //Preview images
+  const gallery = new Viewer(div);
 });
 
 //Scroll Chat to bottom function
@@ -169,3 +172,10 @@ if (elementListTyping) {
     }
   });
 }
+
+// Preview Full Image
+const bodyChatPreviewImage = document.querySelector(".chat .inner-body");
+if(bodyChatPreviewImage){
+  const gallery = new Viewer(bodyChatPreviewImage);
+}
+// End Preview Full Image
