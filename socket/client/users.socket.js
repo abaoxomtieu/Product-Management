@@ -41,6 +41,7 @@ module.exports = (res) => {
     });
     //End function send add friend request
 
+
     //Function send cancel friend request
     socket.on("CLIENT_CANCEL_FRIEND", async (userId) => {
       const myUserId = res.locals.user.id;
@@ -79,5 +80,46 @@ module.exports = (res) => {
       }
     });
     //End function send cancel friend request
+
+
+    //Function send cancel friend request
+    socket.on("CLIENT_REFUSE_FRIEND", async (userId) => {
+      const myUserId = res.locals.user.id;
+      //myUserId=B    userId=A
+
+      //Remove id of userId  in acceptfriends of myUserId
+      const existAinB = await User.findOne({
+        _id: myUserId,
+        acceptFriends: userId,
+      });
+      if (existAinB) {
+        await User.updateOne(
+          {
+            _id: myUserId,
+          },
+          {
+            $pull: { acceptFriends: userId },
+          }
+        );
+      }
+
+      //Remove id of myUserId  in requestFriends of userId
+      const existBinA = await User.findOne({
+        _id: userId,
+        requestFriends: myUserId,
+      });
+      if (existBinA) {
+        await User.updateOne(
+          {
+            _id: userId,
+          },
+          {
+            $pull: { requestFriends: myUserId },
+          }
+        );
+      }
+    });
+    //End function send cancel friend request
+
   });
 };
