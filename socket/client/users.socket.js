@@ -41,7 +41,6 @@ module.exports = (res) => {
     });
     //End function send add friend request
 
-
     //Function send cancel friend request
     socket.on("CLIENT_CANCEL_FRIEND", async (userId) => {
       const myUserId = res.locals.user.id;
@@ -80,7 +79,6 @@ module.exports = (res) => {
       }
     });
     //End function send cancel friend request
-
 
     //Function send cancel friend request
     socket.on("CLIENT_REFUSE_FRIEND", async (userId) => {
@@ -121,5 +119,57 @@ module.exports = (res) => {
     });
     //End function send cancel friend request
 
+    //Function accept friend request
+    socket.on("CLIENT_ACCEPT_FRIEND", async (userId) => {
+      const myUserId = res.locals.user.id;
+      //myUserId=B    userId=A
+
+      // Push {user_id, room_chat_id} of userId into myUserId's friendList
+      //Remove id of userId  in acceptfriends of myUserId
+      const existAinB = await User.findOne({
+        _id: myUserId,
+        acceptFriends: userId,
+      });
+      if (existAinB) {
+        await User.updateOne(
+          {
+            _id: myUserId,
+          },
+          {
+            $push: {
+              friendList: {
+                user_id: userId,
+                room_chat_id: "",
+              },
+            },
+            $pull: { acceptFriends: userId },
+          }
+        );
+      }
+
+      // Push {user_id, room_chat_id} of myUserId into userId's friendList
+      //Remove id of myUserId  in requestFriends of userId
+      const existBinA = await User.findOne({
+        _id: userId,
+        requestFriends: myUserId,
+      });
+      if (existBinA) {
+        await User.updateOne(
+          {
+            _id: userId,
+          },
+          {
+            $push: {
+              friendList: {
+                user_id: myUserId,
+                room_chat_id: "",
+              },
+            },
+            $pull: { requestFriends: myUserId },
+          }
+        );
+      }
+    });
+    //End function accept friend request
   });
 };
