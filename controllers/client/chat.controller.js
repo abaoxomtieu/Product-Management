@@ -2,7 +2,7 @@ const Chat = require("../../models/chat.model");
 const User = require("../../models/user.model");
 
 const chatSocket = require("../../socket/client/chat.socket");
-//GET /cart/
+//GET /chat/
 module.exports.index = async (req, res) => {
   //SocketIO
   chatSocket(res);
@@ -10,7 +10,7 @@ module.exports.index = async (req, res) => {
   //End SocketIO
 
   // Extract data from database
-  const chats = await Chat.find({ deleted: false });
+  const chats = await Chat.find({ deleted: false }).limit(50);
   for (const chat of chats) {
     const infoUser = await User.findOne({ _id: chat.user_id }).select(
       "fullName"
