@@ -38,11 +38,11 @@ module.exports = (res) => {
           }
         );
       }
-      //Get length acceptFriends of userId and return for userId
+        //Get length acceptFriends of userId and return for userId
       const infoUserB = await User.findOne({ _id: userId });
       const lengthAcceptFriends = infoUserB.acceptFriends.length;
       socket.broadcast.emit(
-        "SEVER_RETURN_ACCEPT__FRIEND_LENGTH",
+        "SEVER_RETURN_ACCEPT_FRIEND_LENGTH",
         {userId: userId, lengthAcceptFriends: lengthAcceptFriends}
       );
     });
@@ -84,6 +84,13 @@ module.exports = (res) => {
           }
         );
       }
+      //Get length acceptFriends of userId and return for userId
+      const infoUserB = await User.findOne({ _id: userId });
+      const lengthAcceptFriends = infoUserB.acceptFriends.length;
+      socket.broadcast.emit(
+        "SEVER_RETURN_ACCEPT_FRIEND_LENGTH",
+        {userId: userId, lengthAcceptFriends: lengthAcceptFriends}
+      );
     });
     //End function send cancel friend request
 

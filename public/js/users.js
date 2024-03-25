@@ -54,7 +54,7 @@ if (listBtnAcceptFriend.length > 0) {
 const badgeUserAccept = document.querySelector("[badge-users-accept]");
 if (badgeUserAccept) {
   const userId = badgeUserAccept.getAttribute("badge-users-accept");
-  socket.on("SEVER_RETURN_ACCEPT__FRIEND_LENGTH", (data) => {
+  socket.on("SEVER_RETURN_ACCEPT_FRIEND_LENGTH", (data) => {
     if (userId == data.userId) {
       badgeUserAccept.innerHTML = data.lengthAcceptFriends;
     }
