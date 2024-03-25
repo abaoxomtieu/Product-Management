@@ -56,7 +56,7 @@ if (listBtnAcceptFriend.length > 0) {
 }
 // End Accept friend request
 
-// SEVER_RETURN_ACCEPT__FRIEND_LENGTH
+// SEVER_RETURN_ACCEPT_FRIEND_LENGTH
 const badgeUserAccept = document.querySelector("[badge-users-accept]");
 if (badgeUserAccept) {
   const userId = badgeUserAccept.getAttribute("badge-users-accept");
@@ -77,6 +77,7 @@ if (dataUserAccept) {
     if (userId == data.userId) {
       const div = document.createElement("div");
       div.classList.add("col-6");
+      div.setAttribute("user-id", data.infoUserA._id);
       div.innerHTML = `
         <div class="box-user">
           <div class="inner-avatar">
@@ -106,10 +107,23 @@ if (dataUserAccept) {
 
       //Accept friend
       const buttonAccept = div.querySelector("[btn-accept-friend]");
-      acceptFriend(buttonAccept)
+      acceptFriend(buttonAccept);
       //End Accept friend
     }
   });
 }
 
 //End SERVER_RETURN_INFO_ACCEPT_FRIEND
+
+// SERVER_RETURN_USER_ID_CANCEL_FRIEND
+socket.on("SERVER_RETURN_USER_ID_CANCEL_FRIEND", (data) => {
+  const boxUserRemove = document.querySelector(`[user-id='${data.userIdA}']`);
+  if (boxUserRemove) {
+    const dataUserAccept = document.querySelector("[data-users-accept]");
+    const userIdB = dataUserAccept.getAttribute("data-users-accept");
+    if (userIdB == data.userIdB) {
+      dataUserAccept.removeChild(boxUserRemove);
+    }
+  }
+});
+// End SERVER_RETURN_USER_ID_CANCEL_FRIEND

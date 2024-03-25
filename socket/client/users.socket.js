@@ -54,7 +54,6 @@ module.exports = (res) => {
         userId: userId,
         infoUserA: infoUserA,
       });
-
     });
     //End function send add friend request
 
@@ -101,6 +100,14 @@ module.exports = (res) => {
         userId: userId,
         lengthAcceptFriends: lengthAcceptFriends,
       });
+
+      // Extract info of A(myUserId) and return for B (userId)
+      socket.broadcast.emit("SERVER_RETURN_USER_ID_CANCEL_FRIEND", {
+        userIdB: userId,
+        userIdA: myUserId,
+      });
+
+      // End Extract info of A(myUserId) and return for B (userId)
     });
     //End function send cancel friend request
 
