@@ -38,13 +38,23 @@ module.exports = (res) => {
           }
         );
       }
-        //Get length acceptFriends of userId and return for userId
+      //Get length acceptFriends of userId and return for userId
       const infoUserB = await User.findOne({ _id: userId });
       const lengthAcceptFriends = infoUserB.acceptFriends.length;
-      socket.broadcast.emit(
-        "SEVER_RETURN_ACCEPT_FRIEND_LENGTH",
-        {userId: userId, lengthAcceptFriends: lengthAcceptFriends}
+      socket.broadcast.emit("SEVER_RETURN_ACCEPT_FRIEND_LENGTH", {
+        userId: userId,
+        lengthAcceptFriends: lengthAcceptFriends,
+      });
+
+      //Extract info A(myUserId) and return for B(userId)
+      const infoUserA = await User.findOne({ _id: myUserId }).select(
+        "id avatar fullName"
       );
+      socket.broadcast.emit("SERVER_RETURN_INFO_ACCEPT_FRIEND", {
+        userId: userId,
+        infoUserA: infoUserA,
+      });
+
     });
     //End function send add friend request
 
@@ -87,10 +97,10 @@ module.exports = (res) => {
       //Get length acceptFriends of userId and return for userId
       const infoUserB = await User.findOne({ _id: userId });
       const lengthAcceptFriends = infoUserB.acceptFriends.length;
-      socket.broadcast.emit(
-        "SEVER_RETURN_ACCEPT_FRIEND_LENGTH",
-        {userId: userId, lengthAcceptFriends: lengthAcceptFriends}
-      );
+      socket.broadcast.emit("SEVER_RETURN_ACCEPT_FRIEND_LENGTH", {
+        userId: userId,
+        lengthAcceptFriends: lengthAcceptFriends,
+      });
     });
     //End function send cancel friend request
 
